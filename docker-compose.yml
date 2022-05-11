@@ -1,0 +1,19 @@
+version: '3'
+services:
+  cassandradb:
+    image: cassandra
+    container_name: cassandradb
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_PASSWORD=cassandra
+  postgres:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=admin
