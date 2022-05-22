@@ -20,7 +20,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static com.orderservice.dto.AppConst.SUCCESS_RETURN;
@@ -73,12 +72,12 @@ class OrderServiceApplicationTests {
 
 	private OrderPlaceDto getOrderRequest() {
 		var order1 = new OrderLineItemsDto();
-		order1.setPrice(BigDecimal.valueOf(12500));
+//		order1.setPrice(BigDecimal.valueOf(12500));
 		order1.setSkuCode("IPHONE_13_PLUS_RED_64_GB");
 		order1.setQuantity(5);
 
 		var order2 = new OrderLineItemsDto();
-		order2.setPrice(BigDecimal.valueOf(1300));
+//		order2.setPrice(BigDecimal.valueOf(1300));
 		order2.setSkuCode("IPHONE_6_PLUS_RED_64_GB");
 		order2.setQuantity(2);
 

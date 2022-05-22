@@ -25,5 +25,7 @@ public class OrderLineItems {
 
     private Integer quantity;
 
+    private BigDecimal totalAmount;
+
 
 }

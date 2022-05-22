@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "c96a8157-9e08-4c8c-99cf-c161d546d25f",
+		"name": "MICROSERVICES-ALL-STACK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "18925730"
+	},
+	"item": [
+		{
+			"name": "GATEWAY",
+			"item": [
+				{
+					"name": "Post Product - GATEWAY",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": {
+								"clientSecret": "FownA1RQj8l6aaFVqjYUdRrQ7qohAida",
+								"scope": "openid offline_access",
+								"clientId": "spring-cloud-client",
+								"accessTokenUrl": "http://localhost:8080/realms/spring-boot-microservices-realm/protocol/openid-connect/token",
+								"grant_type": "client_credentials",
+								"tokenName": "token",
+								"username": "alicanli1995@gmail.com",
+								"password": "123456",
+								"client_authentication": "header",
+								"addTokenTo": "header",
+								"authUrl": "http://localhost:8080/auth/realms/microservices-realm/protocol/openid-connect/auth",
+								"redirect_uri": "http://localhost:8082/login/oauth2/code/spring-cloud-gateway-client",
+								"state": "12345",
+								"tokenType": ""
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"IPHONE_10_PLUS_GREEN\",\r\n    \"description\" : \"Iphone 10 Plus GREEN Color 64 GB\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:1010/api/product"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Price - GATEWAY",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": {
+								"clientSecret": "FownA1RQj8l6aaFVqjYUdRrQ7qohAida",
+								"scope": "openid offline_access",
+								"clientId": "spring-cloud-client",
+								"accessTokenUrl": "http://localhost:8080/realms/spring-boot-microservices-realm/protocol/openid-connect/token",
+								"grant_type": "client_credentials",
+								"tokenName": "token",
+								"username": "alicanli1995@gmail.com",
+								"password": "123456",
+								"client_authentication": "header",
+								"addTokenTo": "header",
+								"authUrl": "http://localhost:8080/auth/realms/microservices-realm/protocol/openid-connect/auth",
+								"redirect_uri": "http://localhost:8082/login/oauth2/code/spring-cloud-gateway-client",
+								"state": "12345",
+								"tokenType": ""
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:1010/api/price/IPHONE_12_PLUS_YELLOW"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Price - GATEWAY",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": {
+								"clientSecret": "FownA1RQj8l6aaFVqjYUdRrQ7qohAida",
+								"scope": "openid offline_access",
+								"clientId": "spring-cloud-client",
+								"accessTokenUrl": "http://localhost:8080/realms/spring-boot-microservices-realm/protocol/openid-connect/token",
+								"grant_type": "client_credentials",
+								"tokenName": "token",
+								"username": "alicanli1995@gmail.com",
+								"password": "123456",
+								"client_authentication": "header",
+								"addTokenTo": "header",
+								"authUrl": "http://localhost:8080/auth/realms/microservices-realm/protocol/openid-connect/auth",
+								"redirect_uri": "http://localhost:8082/login/oauth2/code/spring-cloud-gateway-client",
+								"state": "12345",
+								"tokenType": ""
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"IPHONE_12_PLUS_GREEN\",\r\n    \"price\": 32\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:1010/api/price"
+					},
+					"response": []
+				},
+				{
+					"name": "Post Order - GATEWAY",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": {
+								"clientSecret": "FownA1RQj8l6aaFVqjYUdRrQ7qohAida",
+								"scope": "openid offline_access",
+								"clientId": "spring-cloud-client",
+								"accessTokenUrl": "http://localhost:8080/realms/spring-boot-microservices-realm/protocol/openid-connect/token",
+								"grant_type": "client_credentials",
+								"tokenName": "token",
+								"username": "alicanli1995@gmail.com",
+								"password": "123456",
+								"client_authentication": "header",
+								"addTokenTo": "header",
+								"authUrl": "http://localhost:8080/auth/realms/microservices-realm/protocol/openid-connect/auth",
+								"redirect_uri": "http://localhost:8082/login/oauth2/code/spring-cloud-gateway-client",
+								"state": "12345",
+								"tokenType": ""
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderLineItemsList\" : [\r\n        {\r\n            \"skuCode\" : \"IPHONE_12_PLUS_GREEN\",\r\n            \"quantity\" : 3\r\n        }\r\n    ] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:1010/api/order"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"IPHONE_12_PLUS_YELLOW\",\r\n    \"description\" : \"Iphone 12 Plus Yellow Color 64 GB\",\r\n    \"price\": 9999\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5080/api/product"
+			},
+			"response": []
+		},
+		{
+			"name": "Post Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"orderLineItemsList\" : [\r\n        {\r\n            \"skuCode\" : \"IPHONE_12_PLUS_YELLOW\",\r\n            \"price\" : 1200 ,\r\n            \"quantity\" : 3\r\n        }\r\n    ] \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5075/api/order"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:4070/api/product"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Inventory Service With SkuCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:4080/api/inventory/IPHONE_13_RED_64_GB"
+			},
+			"response": []
+		}
+	]
+}

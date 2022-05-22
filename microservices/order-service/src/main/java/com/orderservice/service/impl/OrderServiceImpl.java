@@ -18,6 +18,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -35,7 +36,44 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void placeOrder(OrderPlaceDto orderPlaceDto){
 
-        var isExistAllOrders = orderPlaceDto.getOrderLineItemsList()
+        List<Boolean> isExistAllOrders = isExist(orderPlaceDto);
+
+        if(!isExistAllProducts(isExistAllOrders))
+            throw new NotProductFoundException("This order list one or many product has not in database. " , "Not Product" , debugId );
+
+        List<InventoryResponse> isInStockAllProduct = getInventoryResponses(orderPlaceDto);
+
+        if(!isAllProductHasStock(isInStockAllProduct))
+            throw new NotStockFoundException("This order list one or many product has not enough quantity for this order. " , "Not Enough Quantity" , debugId );
+
+        getPriceAndCalcTotally(orderPlaceDto);
+
+        var order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
+
+        log.warn(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
+
+        reduceInventoryForSuccessProcess(orderPlaceDto);
+
+    }
+
+    private void reduceInventoryForSuccessProcess(OrderPlaceDto orderPlaceDto) {
+        orderPlaceDto.getOrderLineItemsList()
+                .forEach(orderLineItemsDto ->{
+                    var request = OrderRequest.builder()
+                            .skuCode(orderLineItemsDto.getSkuCode())
+                            .quantity(orderLineItemsDto.getQuantity())
+                            .build();
+                    webClientBuilder.build().post()
+                            .uri("http://inventory-service/api/inventory/")
+                            .body(Mono.just(request),OrderRequest.class)
+                            .retrieve()
+                            .bodyToMono(Void.class)
+                            .block();
+                });
+    }
+
+    private List<Boolean> isExist(OrderPlaceDto orderPlaceDto) {
+        return orderPlaceDto.getOrderLineItemsList()
                 .stream()
                 .map(orderLineItemsDto -> {
                     var response = webClientBuilder.build().get()
@@ -47,48 +85,38 @@ public class OrderServiceImpl implements OrderService {
                     assert response != null;
                     return response;
                 }).toList();
+    }
 
-        if(isExistAllProducts(isExistAllOrders)){
-                var isInStockAllProduct = orderPlaceDto.getOrderLineItemsList()
-                        .stream()
-                        .map(orderLineItemsDto -> {
-                            MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-                            queryParams.add("skuCode", orderLineItemsDto.getSkuCode());
-                            queryParams.add("quantity", orderLineItemsDto.getQuantity().toString());
-                            var response =  webClientBuilder.build().get()
-                                    .uri("http://inventory-service/api/inventory/",
-                                            uriBuilder -> uriBuilder.queryParams(queryParams).build())
-                                    .retrieve()
-                                    .bodyToMono(InventoryResponse.class)
-                                    .block();
-                            assert response != null;
-                            return response;
-                        }).toList();
+    private List<InventoryResponse> getInventoryResponses(OrderPlaceDto orderPlaceDto) {
+        return orderPlaceDto.getOrderLineItemsList()
+                    .stream()
+                    .map(orderLineItemsDto -> {
+                        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+                        queryParams.add("skuCode", orderLineItemsDto.getSkuCode());
+                        queryParams.add("quantity", orderLineItemsDto.getQuantity().toString());
+                        var response =  webClientBuilder.build().get()
+                                .uri("http://inventory-service/api/inventory/",
+                                        uriBuilder -> uriBuilder.queryParams(queryParams).build())
+                                .retrieve()
+                                .bodyToMono(InventoryResponse.class)
+                                .block();
+                        assert response != null;
+                        return response;
+                    }).toList();
+    }
 
-                if(isAllProductHasStock(isInStockAllProduct)){
-                    var order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
-                    log.warn(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
-                    orderPlaceDto.getOrderLineItemsList()
-                            .forEach(orderLineItemsDto ->{
-                                var request = OrderRequest.builder()
-                                        .skuCode(orderLineItemsDto.getSkuCode())
-                                        .quantity(orderLineItemsDto.getQuantity())
-                                        .build();
-                                webClientBuilder.build().post()
-                                        .uri("http://inventory-service/api/inventory/")
-                                        .body(Mono.just(request),OrderRequest.class)
-                                        .retrieve()
-                                        .bodyToMono(Void.class)
-                                        .block();
-                            });
-                }
-                else
-                    throw new NotStockFoundException("This order list one or many product has not enough quantity for this order. " , "Not Enough Quantity" , debugId );
-        }
-        else
-            throw new NotProductFoundException("This order list one or many product has not in database. " , "Not Product" , debugId );
-
-
+    private void getPriceAndCalcTotally(OrderPlaceDto orderPlaceDto) {
+        orderPlaceDto.getOrderLineItemsList().forEach(orderLineItemsDto ->
+        {
+            var price = webClientBuilder.build().get()
+                    .uri("http://price-service/api/price/" + orderLineItemsDto.getSkuCode() )
+                    .retrieve()
+                    .bodyToMono(BigDecimal.class)
+                    .block();
+            assert price != null;
+            orderLineItemsDto.setPrice(price);
+            orderLineItemsDto.setTotalAmount(price.multiply(BigDecimal.valueOf(orderLineItemsDto.getQuantity())));
+        });
     }
 
     private boolean isAllProductHasStock(List<InventoryResponse> isInStockAllProduct) {

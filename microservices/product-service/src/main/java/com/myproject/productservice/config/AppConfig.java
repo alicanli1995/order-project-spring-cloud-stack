@@ -18,13 +18,11 @@ public class AppConfig {
                     .id(UUID.randomUUID().toString())
                     .name(context.getSource().getName())
                     .description(context.getSource().getDescription())
-                    .price(context.getSource().getPrice())
                     .build();
     private static final Converter<Product, ProductResponse>  PRODUCT_TO_PRODUCT_RESPONSE_CONVERTER =
             context -> ProductResponse.builder()
                     .name(context.getSource().getName())
                     .description(context.getSource().getDescription())
-                    .price(context.getSource().getPrice())
                     .build();
 
     @Bean

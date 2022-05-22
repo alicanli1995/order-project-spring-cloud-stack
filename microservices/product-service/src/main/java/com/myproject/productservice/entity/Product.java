@@ -12,9 +12,7 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 
 @Table("products")
 @AllArgsConstructor
@@ -35,8 +33,5 @@ public class Product {
     @Size(min = 5)
     private String description;
 
-    @Column
-    @Positive
-    private BigDecimal price;
 
 }

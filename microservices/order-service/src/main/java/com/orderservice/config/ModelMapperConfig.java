@@ -19,6 +19,7 @@ public class ModelMapperConfig {
             context -> OrderLineItems.builder()
                     .quantity(context.getSource().getQuantity())
                     .skuCode(context.getSource().getSkuCode())
+                    .totalAmount(context.getSource().getTotalAmount())
                     .price(context.getSource().getPrice())
                     .build();
 
@@ -28,6 +29,7 @@ public class ModelMapperConfig {
                 var entityObject = listOfDto.stream().map(orderLineItemsDto -> {
                     var orderLineItem = new OrderLineItems();
                     orderLineItem.setPrice(orderLineItemsDto.getPrice());
+                    orderLineItem.setTotalAmount(orderLineItemsDto.getTotalAmount());
                     orderLineItem.setQuantity(orderLineItemsDto.getQuantity());
                     orderLineItem.setSkuCode(orderLineItemsDto.getSkuCode());
                     return orderLineItem;
