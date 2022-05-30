@@ -21,6 +21,8 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.orderservice.dto.AppConst.SUCCESS_RETURN;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -34,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final WebClient.Builder webClientBuilder;
 
     @Override
-    public void placeOrder(OrderPlaceDto orderPlaceDto){
+    public String  placeOrder(OrderPlaceDto orderPlaceDto){
 
         List<Boolean> isExistAllOrders = isExist(orderPlaceDto);
 
@@ -50,9 +52,11 @@ public class OrderServiceImpl implements OrderService {
 
         var order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
 
-        log.warn(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
+        log.info(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
 
         reduceInventoryForSuccessProcess(orderPlaceDto);
+
+        return SUCCESS_RETURN.getMessage();
 
     }
 

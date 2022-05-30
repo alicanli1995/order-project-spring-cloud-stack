@@ -22,20 +22,17 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public BigDecimal getPriceForProduct(String name) {
-        var price =  priceRepository.findByName(name);
-        if(price.isEmpty()) throw new RuntimeException("This product is not in price database .");
-        return price.get().getPriceProduct();
+        var price =  priceRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("This product is not in price database ."));
+        return price.getPriceProduct();
     }
 
     @Override
     public PriceGenericResponse changePriceProduct(ChangePriceRequest request) {
-        var priceData = priceRepository.findByName(request.getName());
-        if(priceData.isEmpty()) throw new RuntimeException("This product is not in price database .");
-        priceData.get().setPriceProduct(request.getPrice());
+        var priceData =  priceRepository.findByName(request.getName())
+                .orElseThrow(() -> new RuntimeException("This product is not in price database ."));
+        priceData.setPriceProduct(request.getPrice());
         priceRepository.save(modelMapper.map(priceData, Price.class));
-        return PriceGenericResponse.builder()
-                .price(priceData.get().getPriceProduct())
-                .name(priceData.get().getName())
-                .build();
+        return modelMapper.map(priceData,PriceGenericResponse.class);
     }
 }

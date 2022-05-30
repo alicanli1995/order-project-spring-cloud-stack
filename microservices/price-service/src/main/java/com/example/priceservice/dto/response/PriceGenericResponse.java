@@ -13,5 +13,5 @@ import java.math.BigDecimal;
 @Builder
 public class PriceGenericResponse {
     private String name;
-    private BigDecimal price;
+    private BigDecimal priceProduct;
 }
