@@ -11,6 +11,7 @@ import com.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,6 +31,7 @@ import static com.orderservice.dto.AppConst.SUCCESS_RETURN;
 public class OrderServiceImpl implements OrderService {
 
     private static final String debugId = "43a37753-bad2-4eae-af3b-3a28269d45c5";
+    private final Tracer tracer;
 
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
@@ -43,18 +45,26 @@ public class OrderServiceImpl implements OrderService {
         if(!isExistAllProducts(isExistAllOrders))
             throw new NotProductFoundException("This order list one or many product has not in database. " , "Not Product" , debugId );
 
-        List<InventoryResponse> isInStockAllProduct = getInventoryResponses(orderPlaceDto);
+        var lookUp = tracer.nextSpan().name("Inventory Service Look Up");
 
-        if(!isAllProductHasStock(isInStockAllProduct))
-            throw new NotStockFoundException("This order list one or many product has not enough quantity for this order. " , "Not Enough Quantity" , debugId );
+        try (Tracer.SpanInScope spanIsScope = tracer.withSpan(lookUp.start())){
 
-        getPriceAndCalcTotally(orderPlaceDto);
+            List<InventoryResponse> isInStockAllProduct = getInventoryResponses(orderPlaceDto);
 
-        var order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
+            if(!isAllProductHasStock(isInStockAllProduct))
+                throw new NotStockFoundException("This order list one or many product has not enough quantity for this order. " , "Not Enough Quantity" , debugId );
 
-        log.info(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
+            getPriceAndCalcTotally(orderPlaceDto);
 
-        reduceInventoryForSuccessProcess(orderPlaceDto);
+            var order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
+
+            log.info(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
+
+            reduceInventoryForSuccessProcess(orderPlaceDto);
+
+        }finally {
+            lookUp.end();
+        }
 
         return SUCCESS_RETURN.getMessage();
 
