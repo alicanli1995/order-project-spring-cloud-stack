@@ -1,11 +1,14 @@
 package com.orderservice.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.orderservice.dto.request.OrderPlaceDto;
 import com.orderservice.dto.request.OrderRequest;
 import com.orderservice.dto.response.InventoryResponse;
 import com.orderservice.entity.Order;
+import com.orderservice.entity.OrderEvent;
 import com.orderservice.exception.NotProductFoundException;
 import com.orderservice.exception.NotStockFoundException;
+import com.orderservice.producer.OrderProducer;
 import com.orderservice.repository.OrderRepository;
 import com.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private static final String debugId = "43a37753-bad2-4eae-af3b-3a28269d45c5";
     private final Tracer tracer;
 
+    private final OrderProducer orderProducer;
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
     private final WebClient.Builder webClientBuilder;
@@ -41,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
     public String  placeOrder(OrderPlaceDto orderPlaceDto){
 
         List<Boolean> isExistAllOrders = isExist(orderPlaceDto);
+
+        Order order;
 
         if(!isExistAllProducts(isExistAllOrders))
             throw new NotProductFoundException("This order list one or many product has not in database. " , "Not Product" , debugId );
@@ -56,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
 
             getPriceAndCalcTotally(orderPlaceDto);
 
-            var order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
+            order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
 
             log.info(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
 
@@ -65,6 +71,18 @@ public class OrderServiceImpl implements OrderService {
         }finally {
             lookUp.end();
         }
+
+        var orderEvent = OrderEvent.builder()
+                .orderId(order.getOrderNumber())
+                .orderLineItems(orderPlaceDto.getOrderLineItemsList())
+                .build();
+
+        try {
+            orderProducer.sendOrderEventAsync(orderEvent);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
 
         return SUCCESS_RETURN.getMessage();
 

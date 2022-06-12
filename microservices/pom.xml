@@ -21,6 +21,7 @@
         <module>registry-server</module>
         <module>api-gateway</module>
         <module>price-service</module>
+        <module>invoice-service</module>
     </modules>
 
     <properties>
