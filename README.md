@@ -17,19 +17,18 @@
 # What technologies exist ? 
     
     Integration Tests with TestContainers And JUnit 5
-    Gateway Service
+    Gateway Service With Spring Cloud Gateway
     Auth Server with Keycloak
     NoSQL Database ( Apache Cassandra )
-    SQL Database ( PostgreSQL)
-    Messaging Systems ( RabbitMQ, Kafka , Spring Cloud Stream)
+    Relational Database ( PostgreSQL)
+    Messaging Systems (Kafka)
     Resilience pattern with Resilience4J 
     Eureka registry service
     Config server with git repository
     Vault server for store secret informations
     Zipkin for distributed tracing
     ELK (Elasticsearch , Logstash , Kibana) Stack for distributed logging
-    Statistic service with Async communication -> Kafka or RabbitMQ
-    Sync and Async communication 
+    Statistic service with Async communication -> Kafka
     Exception Handling
     Layered Architecture
     Dockerize all project ( maybe not implementing )

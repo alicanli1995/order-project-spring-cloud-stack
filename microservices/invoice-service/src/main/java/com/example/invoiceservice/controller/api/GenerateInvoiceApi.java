@@ -1,13 +1,12 @@
 package com.example.invoiceservice.controller.api;
 
 
-import com.example.invoiceservice.controller.pdf.GeneratePdfReport;
 import com.example.invoiceservice.controller.pdf.PDFExporter;
+import com.example.invoiceservice.controller.response.InvoiceResult;
 import com.example.invoiceservice.service.GenerateInvoiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -54,22 +52,16 @@ public class GenerateInvoiceApi {
 
     @GetMapping(value = "/{orderId}",produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> generateInvoiceWithBis(@Validated @PathVariable String orderId){
+
         log.info("Generate Invoice Started -> ");
-        var invoice = generateInvoiceService.generateInvoice(orderId);
-        ByteArrayInputStream bis = GeneratePdfReport.invoiceGeneratePdf(invoice);
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-        var headers = new HttpHeaders();
-        headers.add("Content-Disposition",
-                "inline; filename= " + invoice.getOrderId() + currentDateTime + ".pdf");
+        InvoiceResult invoice = generateInvoiceService.generateInvoiceBis(orderId);
 
         return ResponseEntity
                 .ok()
-                .headers(headers)
+                .headers(invoice.getHeaders())
                 .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(bis));
+                .body(new InputStreamResource(invoice.getStream()));
 
     }
-
 
 }
