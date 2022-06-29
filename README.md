@@ -1,6 +1,6 @@
 ## This project is being implemented as a project that includes all the spring microservices, cloud, messaging systems that I have learned about.
 
-## The project is under construction, will be updated December by the end of the full documentation will be added to the general structure and the technologies it will include as follows.
+## The project is under construction, it will be updated sometimes, the full documentation will be added when it is finished, the general structure and the technologies it will contain are as follows.
 
 ***Percentage of progress : 70%***
 
