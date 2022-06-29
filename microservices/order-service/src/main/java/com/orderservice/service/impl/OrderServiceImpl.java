@@ -45,11 +45,10 @@ public class OrderServiceImpl implements OrderService {
     public String  placeOrder(OrderPlaceDto orderPlaceDto){
 
         List<Boolean> isExistAllOrders = isExist(orderPlaceDto);
-
-        Order order;
-
         if(!isExistAllProducts(isExistAllOrders))
             throw new NotProductFoundException("This order list one or many product has not in database. " , "Not Product" , debugId );
+
+        Order order;
 
         var lookUp = tracer.nextSpan().name("Inventory Service Look Up");
 
@@ -72,12 +71,11 @@ public class OrderServiceImpl implements OrderService {
             lookUp.end();
         }
 
-        var orderEvent = OrderEvent.builder()
-                .orderId(order.getOrderNumber())
-                .orderLineItems(orderPlaceDto.getOrderLineItemsList())
-                .build();
-
         try {
+            var orderEvent = OrderEvent.builder()
+                    .orderId(order.getOrderNumber())
+                    .orderLineItems(orderPlaceDto.getOrderLineItemsList())
+                    .build();
             orderProducer.sendOrderEventAsync(orderEvent);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e.getMessage());

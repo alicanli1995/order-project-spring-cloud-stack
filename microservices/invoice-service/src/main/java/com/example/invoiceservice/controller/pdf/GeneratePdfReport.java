@@ -2,12 +2,11 @@ package com.example.invoiceservice.controller.pdf;
 
 import com.example.invoiceservice.domain.EventsOrderLineItems;
 import com.example.invoiceservice.domain.OrderEvent;
-import com.lowagie.text.*;
 import com.lowagie.text.Font;
+import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import lombok.Builder;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -15,9 +14,10 @@ import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 @Data
-@Builder
 @Log4j2
 public class GeneratePdfReport {
+    //TODO: implements more than one order items in the invoice
+
     public static ByteArrayInputStream invoiceGeneratePdf(OrderEvent invoice) {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();

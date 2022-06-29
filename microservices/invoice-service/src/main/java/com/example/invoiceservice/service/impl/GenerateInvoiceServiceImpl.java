@@ -26,7 +26,6 @@ public class GenerateInvoiceServiceImpl implements GenerateInvoiceService {
     @Transactional(readOnly = true)
     public InvoiceResult generateInvoiceBis(String orderId) {
         var invoice = eventRepository.findByOrderId(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
-
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
         var headers = new HttpHeaders();

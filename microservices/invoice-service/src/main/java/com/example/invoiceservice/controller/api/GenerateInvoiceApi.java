@@ -52,10 +52,8 @@ public class GenerateInvoiceApi {
 
     @GetMapping(value = "/{orderId}",produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> generateInvoiceWithBis(@Validated @PathVariable String orderId){
-
         log.info("Generate Invoice Started -> ");
         InvoiceResult invoice = generateInvoiceService.generateInvoiceBis(orderId);
-
         return ResponseEntity
                 .ok()
                 .headers(invoice.getHeaders())

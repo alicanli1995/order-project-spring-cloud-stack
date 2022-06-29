@@ -1,6 +1,8 @@
 ## This project is being implemented as a project that includes all the spring microservices, cloud, messaging systems that I have learned about.
 
-## Proje yapım aşamasındadır aralıklarla güncellenecek bitince tam dökümantasyon eklenecek genel yapı ve içereceği teknolojiler aşağıdaki gibidir.
+## The project is under construction, will be updated December by the end of the full documentation will be added to the general structure and the technologies it will include as follows.
+
+***Percentage of progress : 70%***
 
 <p align="center">
 <img src="img/diagram.jpg" alt="ci" width="1000" class="center"/>
@@ -11,6 +13,12 @@
 
 <p align="center">
 <img src="img/invoice.jpg" alt="ci" width="1000" class="center"/>
+</p>
+
+### Mail Service Sending Basic Mail ->  Samples Output -> 
+
+<p align="center">
+<img src="img/mail.png" alt="ci" width="1000" class="center"/>
 </p>
 
 

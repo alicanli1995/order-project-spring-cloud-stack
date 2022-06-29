@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class OrderEvent {
     private String orderId;
 
     private String userName;
+
+    @Email
+    private String userEmail;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

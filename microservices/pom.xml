@@ -22,6 +22,7 @@
         <module>api-gateway</module>
         <module>price-service</module>
         <module>invoice-service</module>
+        <module>notification-service</module>
     </modules>
 
     <properties>
