@@ -22,9 +22,7 @@ import static com.orderservice.dto.AppConst.FALLBACK_METHOD_RETURN;
 @RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
-
     private final OrderService orderService;
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -38,5 +36,4 @@ public class OrderController {
     public CompletableFuture<String> fallbackMethod(OrderPlaceDto orderRequest, RuntimeException exception){
         return CompletableFuture.supplyAsync(FALLBACK_METHOD_RETURN::getMessage);
     }
-
 }
