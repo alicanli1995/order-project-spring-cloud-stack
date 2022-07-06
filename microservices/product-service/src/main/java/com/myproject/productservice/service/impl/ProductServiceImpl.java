@@ -4,17 +4,17 @@ import com.myproject.productservice.dto.request.CreateProductDto;
 import com.myproject.productservice.dto.response.ProductResponse;
 import com.myproject.productservice.entity.Product;
 import com.myproject.productservice.exception.ProductAlreadyExist;
-import com.myproject.productservice.exception.ProductNotFoundException;
 import com.myproject.productservice.repository.ProductRepository;
 import com.myproject.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
+    @CacheEvict(cacheNames = "product-cache", allEntries = true)
     public void createProduct(CreateProductDto createProductDto){
         var product =  modelMapper.map(createProductDto, Product.class);
         if(Boolean.TRUE.equals(isExistProduct(product.getName()))){
@@ -39,7 +40,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductResponse> retrieveAllProducts() {
+    @Cacheable(cacheNames = "product-cache")
+    public List<ProductResponse> retrieveAllProducts() throws InterruptedException {
         return productRepository.findAll().stream()
                 .map(product -> modelMapper.map(product,ProductResponse.class))
                 .toList();

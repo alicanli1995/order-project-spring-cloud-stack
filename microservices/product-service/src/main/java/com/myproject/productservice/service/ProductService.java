@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductService {
     void createProduct(CreateProductDto createProductDto);
-    List<ProductResponse> retrieveAllProducts();
+    List<ProductResponse> retrieveAllProducts() throws InterruptedException;
 
     Boolean retrieveByName(String name);
 }

@@ -34,7 +34,7 @@ public class ProductController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<ProductResponse>> retrieveAllProducts(){
+    public ResponseEntity<List<ProductResponse>> retrieveAllProducts() throws InterruptedException {
         return ResponseEntity.ok(productService.retrieveAllProducts());
     }
 
