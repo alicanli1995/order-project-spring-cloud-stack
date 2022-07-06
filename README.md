@@ -30,6 +30,7 @@
     NoSQL Database ( Apache Cassandra )
     Relational Database ( PostgreSQL)
     Messaging Systems (Kafka)
+    Redis Cache 
     Resilience pattern with Resilience4J 
     Eureka registry service
     Config server with git repository
