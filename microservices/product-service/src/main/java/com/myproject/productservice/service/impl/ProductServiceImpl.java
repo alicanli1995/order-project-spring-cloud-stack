@@ -7,7 +7,7 @@ import com.myproject.productservice.exception.ProductAlreadyExist;
 import com.myproject.productservice.repository.ProductRepository;
 import com.myproject.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,9 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
-@Log4j2
 public class ProductServiceImpl implements ProductService {
+
 
     private static final String debugId = "acecefaa-aae9-4382-8277-e320ef6b7687";
     private final ModelMapper modelMapper;

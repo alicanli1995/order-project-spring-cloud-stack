@@ -1,8 +1,10 @@
 ## This project is being implemented as a project that includes all the spring microservices, cloud, messaging systems that I have learned about.
 
-## The project is under construction, it will be updated sometimes, the full documentation will be added when it is finished, the general structure and the technologies it will contain are as follows.
+### Project almost done. I am working on the following, this is a last part of the big picture:
+Vault Service - Vault is a secure, flexible, and easy-to-use key-value store. It is a tool for storing secrets, configuration, and other data in a highly encrypted and protected way.
 
-***Percentage of progress : 70%***
+
+***Percentage of progress : 95%***
 
 <p align="center">
 <img src="img/diagram.jpg" alt="ci" width="1000" class="center"/>
@@ -24,7 +26,7 @@
 
 # What technologies exist ? 
     
-    Integration Tests with TestContainers And JUnit 5
+    Integration Tests with TestContainers And JUnit5 
     Gateway Service With Spring Cloud Gateway
     Auth Server with Keycloak
     NoSQL Database ( Apache Cassandra )
