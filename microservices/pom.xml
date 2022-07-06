@@ -24,6 +24,7 @@
         <module>invoice-service</module>
         <module>notification-service</module>
         <module>config-service</module>
+        <module>statistic-service</module>
     </modules>
 
     <properties>

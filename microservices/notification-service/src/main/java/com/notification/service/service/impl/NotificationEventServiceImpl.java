@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.notification.service.domain.OrderEvent;
 import com.notification.service.plugin.MailService;
+import com.notification.service.producer.NotificationProducer;
 import com.notification.service.service.NotificationEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class NotificationEventServiceImpl implements NotificationEventService {
 
     private final MailService mailService;
+
+    private final NotificationProducer notificationProducer;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -23,6 +26,7 @@ public class NotificationEventServiceImpl implements NotificationEventService {
         var event = objectMapper.readValue(records.value(), OrderEvent.class);
         log.info("notificationEvents -> {}", event );
         sendMail(event);
+        notificationProducer.sendOrderEventAsync(event);
     }
 
     private void sendMail(OrderEvent event) {
