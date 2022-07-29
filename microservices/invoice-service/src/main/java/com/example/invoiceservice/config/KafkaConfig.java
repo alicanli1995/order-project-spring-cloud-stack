@@ -69,10 +69,10 @@ public class KafkaConfig {
         if (exception.getCause() instanceof RecoverableDataAccessException) {
             log.info("Inside the recoverable logic");
             //Add any Recovery Code here.
-            failureRecordService.saveFailedRecord((ConsumerRecord<Integer, String>) record, exception, RETRY);
+            failureRecordService.saveFailedRecord((ConsumerRecord<String, String>) record, exception, RETRY);
 
         } else {
-            failureRecordService.saveFailedRecord((ConsumerRecord<Integer, String>) record, exception, DEAD);
+            failureRecordService.saveFailedRecord((ConsumerRecord<String, String>) record, exception, DEAD);
             log.info("Inside the non recoverable logic and skipping the record : {}", record);
 
         }

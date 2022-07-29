@@ -27,5 +27,15 @@ public class EventsOrderLineItems {
 
     private BigDecimal totalAmount;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EventsOrderLineItems that)) return false;
+        return id.equals(that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

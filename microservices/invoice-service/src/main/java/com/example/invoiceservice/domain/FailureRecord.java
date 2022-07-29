@@ -16,14 +16,13 @@ import javax.persistence.Id;
 @Entity
 public class FailureRecord {
 
-
     @Id
     @GeneratedValue
     private Integer id;
 
     private String topic_record;
 
-    private Integer key_record;
+    private String key_record;
 
     private String errorRecord;
 

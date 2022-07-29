@@ -54,19 +54,24 @@ public class OrderServiceImpl implements OrderService {
 
         try (Tracer.SpanInScope spanIsScope = tracer.withSpan(lookUp.start())){
 
-            List<InventoryResponse> isInStockAllProduct = getInventoryResponses(orderPlaceDto);
+            try{
+                List<InventoryResponse> isInStockAllProduct = getInventoryResponses(orderPlaceDto);
 
-            if(!isAllProductHasStock(isInStockAllProduct))
-                throw new NotStockFoundException("This order list one or many product has not enough quantity for this order. " , "Not Enough Quantity" , debugId );
+                if(!isAllProductHasStock(isInStockAllProduct))
+                    throw new NotStockFoundException("This order list one or many product has not enough quantity for this order. " , "Not Enough Quantity" , debugId );
 
-            getPriceAndCalcTotally(orderPlaceDto);
+                getPriceAndCalcTotally(orderPlaceDto);
 
-            order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
+                order = orderRepository.save(modelMapper.map(orderPlaceDto,Order.class));
 
-            log.info(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
+                log.info(String.format("Order placed successfully. Order id is -> %s " ,order.getId()));
 
-            reduceInventoryForSuccessProcess(orderPlaceDto);
-
+                reduceInventoryForSuccessProcess(orderPlaceDto);
+            }
+            catch (Exception e){
+                log.error(String.format("Error when place order. Error message is -> %s " , e.getMessage()));
+                throw e;
+            }
         }finally {
             lookUp.end();
         }
@@ -80,8 +85,6 @@ public class OrderServiceImpl implements OrderService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e.getMessage());
         }
-
-
         return SUCCESS_RETURN.getMessage();
 
     }

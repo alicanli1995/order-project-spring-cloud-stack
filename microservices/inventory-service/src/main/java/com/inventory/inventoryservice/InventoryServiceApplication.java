@@ -19,6 +19,8 @@ public class InventoryServiceApplication {
 	@Bean
 	public CommandLineRunner loadData(InventoryRepository inventoryRepository){
 		return args -> {
+			if (inventoryRepository.findAll().size()>0)
+				return;
 
 			var inventory = new Inventory();
 			inventory.setSkuCode("IPHONE_12_PLUS_YELLOW");

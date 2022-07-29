@@ -26,8 +26,7 @@ public class NotificationProducer {
         String key = orderEvent.getOrderId();
         String value = objectMapper.writeValueAsString(orderEvent);
 
-        var result = kafkaTemplate.send("notification-events",value);
-        result.addCallback(new ListenableFutureCallback<>() {
+         kafkaTemplate.send("notification-events",value).addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onSuccess(SendResult<String, String> result) {
                 handleSuccess(key,value,result);

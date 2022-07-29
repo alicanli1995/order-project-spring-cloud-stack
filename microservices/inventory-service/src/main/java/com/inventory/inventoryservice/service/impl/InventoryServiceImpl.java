@@ -19,6 +19,7 @@ public class InventoryServiceImpl implements InventoryService {
 //    private static final String debugId = "24bb6aa3-9729-4e54-a4fb-5975c57f69ba";
     private final InventoryRepository inventoryRepository;
     @Override
+    @Transactional
     public void orderPlacedReduceQuantity(OrderRequest orderRequest) {
         var product = inventoryRepository.findBySkuCode(orderRequest.getSkuCode());
         product.setQuantity(product.getQuantity() - orderRequest.getQuantity());
@@ -28,7 +29,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public InventoryResponse isInStockWithStock(String skuCode, Integer quantity) {
         var response =  inventoryRepository.findBySkuCode(skuCode);
         if ((response.getQuantity() - quantity)>0 ) {

@@ -16,7 +16,7 @@ public class FailureRecordServiceImpl implements FailureRecordService {
 
     private final FailureRecordRepository failureRecordRepository;
 
-    public void saveFailedRecord(ConsumerRecord<Integer, String> record, Exception exception, String recordStatus){
+    public void saveFailedRecord(ConsumerRecord<String, String> record, Exception exception, String recordStatus){
         var failureRecord = new FailureRecord(
                 null,
                 record.topic(),

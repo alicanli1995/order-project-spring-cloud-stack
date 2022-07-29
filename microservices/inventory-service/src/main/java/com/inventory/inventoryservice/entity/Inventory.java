@@ -25,6 +25,16 @@ public class Inventory {
     @Column(nullable = false)
     private Integer quantity;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Inventory inventory)) return false;
 
+        return id.equals(inventory.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
