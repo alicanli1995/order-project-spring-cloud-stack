@@ -25,6 +25,7 @@
         <module>notification-service</module>
         <module>config-service</module>
         <module>statistic-service</module>
+        <module>../infrastructure</module>
     </modules>
 
     <properties>

@@ -21,7 +21,9 @@ import javax.validation.constraints.Size;
 @Data
 public class Product {
 
-    @PrimaryKeyColumn(name = "id" , ordinal = 0 , type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "id" , ordinal = 0 ,
+            type = PrimaryKeyType.PARTITIONED,
+            ordering = Ordering.DESCENDING)
     @Id
     private String id;
 
