@@ -1,4 +1,4 @@
-package com.myproject.productservice.config;
+package com.example.priceservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -8,13 +8,14 @@ import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecific
 import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
 @EnableCassandraRepositories
 public class CassandraConfig extends AbstractCassandraConfiguration {
-    private static final String keyspace = "product_service";
-    private static final String basePackages = "com.myproject.productservice.entity";
+    private static final String keyspace = "price_service";
+    private static final String basePackages = "com.example.priceservice.entity";
 
     @Override
     protected String getKeyspaceName() {
@@ -31,19 +32,19 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
         return new String[] {basePackages};
     }
 
-
     @Override
     protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
         return List.of(DropKeyspaceSpecification.dropKeyspace(keyspace));
     }
+
     @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
-        final CreateKeyspaceSpecification specification =
-                CreateKeyspaceSpecification.createKeyspace(keyspace)
-                        .ifNotExists()
-                        .with(KeyspaceOption.DURABLE_WRITES, true)
-                        .withSimpleReplication();
-        return List.of(specification);
+        return Collections.singletonList(CreateKeyspaceSpecification
+                .createKeyspace(keyspace)
+                .ifNotExists(true)
+                .with(KeyspaceOption.DURABLE_WRITES, true)
+                .withSimpleReplication());
     }
+
 
 }

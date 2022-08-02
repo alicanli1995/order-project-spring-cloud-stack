@@ -2,11 +2,14 @@ DROP SCHEMA IF EXISTS "statistics" CASCADE;
 
 CREATE SCHEMA "statistics";
 
-DROP TABLE IF EXISTS "statistics".all_orders CASCADE;
+create sequence native;
 
-create table if not exists statistics.all_orders
+alter sequence native owner to postgres;
+
+create table if not exists all_orders
 (
-    id               bigint       not null constraint all_orders_pkey primary key,
+    id               bigint       not null
+        primary key,
     client_ip        varchar(255) not null,
     correlation_id   varchar(255) not null,
     create_time      timestamp,
@@ -22,4 +25,6 @@ create table if not exists statistics.all_orders
     total_amount     numeric(19, 2)
 );
 
+alter table all_orders
+    owner to postgres;
 

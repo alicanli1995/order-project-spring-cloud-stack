@@ -21,6 +21,9 @@ public class PriceServiceApplication {
     public CommandLineRunner loadData(PriceRepository priceRepository) {
 
         return args -> {
+            if (!priceRepository.findAll().isEmpty())
+                return;
+
             var price = new Price();
             price.setName("IPHONE_12_PLUS_YELLOW");
             price.setPriceProduct(BigDecimal.valueOf(500));
@@ -28,8 +31,20 @@ public class PriceServiceApplication {
 
             var price2 = new Price();
             price2.setName("IPHONE_12_PLUS_GREEN");
-            price2.setPriceProduct(BigDecimal.valueOf(5003));
+            price2.setPriceProduct(BigDecimal.valueOf(600));
             priceRepository.save(price2);
+
+            var price3 = new Price();
+            price3.setName("IPHONE_12_PLUS_BLUE");
+            price3.setPriceProduct(BigDecimal.valueOf(756));
+            priceRepository.save(price3);
+
+            var price4 = new Price();
+            price4.setName("IPHONE_12_PLUS_RED");
+            price4.setPriceProduct(BigDecimal.valueOf(800));
+            priceRepository.save(price4);
+
+
         };
 
     }
